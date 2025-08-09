@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一次性用品单杯成本计算器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4285f4',
+                        secondary: '#1967d2',
+                        neutral: '#f5f5f5',
+                        light: '#f9f9f9',
+                        border: '#eee'
+                    },
+                    fontFamily: {
+                        sans: ['Helvetica Neue', 'Arial', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral font-sans">
+    <div class="max-w-md mx-auto p-4 sm:p-5">
+        <div class="bg-white rounded-xl p-6 card-shadow">
+            <h1 class="text-xl font-medium text-center text-gray-800 mb-6">一次性用品单杯成本计算器</h1>
+
+            <!-- 容器类型选择 -->
+            <div class="mb-6">
+                <div class="text-gray-600 font-medium pb-2 border-b border-border mb-4">
+                    选择容器类型（默认价格将自动填充）
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="text-center">
+                        <input type="radio" id="soybean" name="container" value="soybean" class="hidden peer">
+                        <label for="soybean" class="block p-3 border rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5">
+                            豆浆杯
+                        </label>
+                    </div>
+                    <div class="text-center">
+                        <input type="radio" id="pp" name="container" value="pp" class="hidden peer">
+                        <label for="pp" class="block p-3 border rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5">
+                            PP杯
+                        </label>
+                    </div>
+                    <div class="text-center">
+                        <input type="radio" id="pet" name="container" value="pet" class="hidden peer">
+                        <label for="pet" class="block p-3 border rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5">
+                            PET杯
+                        </label>
+                    </div>
+                    <div class="text-center">
+                        <input type="radio" id="custom" name="container" value="custom" class="hidden peer">
+                        <label for="custom" class="block p-3 border rounded-lg cursor-pointer transition-all peer-checked:border-primary peer-checked:bg-primary/5">
+                            自定义
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 物品价格设置 -->
+            <div class="mb-6">
+                <div class="text-gray-600 font-medium pb-2 border-b border-border mb-4">
+                    填写价格（可手动修改）
+                </div>
+                
+                <div class="space-y-4">
+                    <div>
+                        <label for="straw-price" class="block text-sm text-gray-700 mb-1">吸管：价格（元）</label>
+                        <input type="number" step="0.01" id="straw-price" placeholder="输入价格" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label for="straw-count" class="block text-sm text-gray-700 mb-1">吸管：数量（个）</label>
+                        <input type="number" min="1" id="straw-count" placeholder="输入数量" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+
+                    <div>
+                        <label for="cup-price" class="block text-sm text-gray-700 mb-1">杯子：价格（元）</label>
+                        <input type="number" step="0.01" id="cup-price" placeholder="输入价格" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label for="cup-count" class="block text-sm text-gray-700 mb-1">杯子：数量（个）</label>
+                        <input type="number" min="1" id="cup-count" placeholder="输入数量" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+
+                    <div>
+                        <label for="lid-price" class="block text-sm text-gray-700 mb-1">杯盖：价格（元）</label>
+                        <input type="number" step="0.01" id="lid-price" placeholder="输入价格" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label for="lid-count" class="block text-sm text-gray-700 mb-1">杯盖：数量（个）</label>
+                        <input type="number" min="1" id="lid-count" placeholder="输入数量" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+
+                    <div>
+                        <label for="paper-price" class="block text-sm text-gray-700 mb-1">防漏纸：价格（元）</label>
+                        <input type="number" step="0.01" id="paper-price" placeholder="输入价格" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label for="paper-count" class="block text-sm text-gray-700 mb-1">防漏纸：数量（个）</label>
+                        <input type="number" min="1" id="paper-count" placeholder="输入数量" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+
+                    <div>
+                        <label for="bag-price" class="block text-sm text-gray-700 mb-1">袋子：价格（元）</label>
+                        <input type="number" step="0.01" id="bag-price" placeholder="输入价格" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                    <div>
+                        <label for="bag-count" class="block text-sm text-gray-700 mb-1">袋子：数量（个）</label>
+                        <input type="number" min="1" id="bag-count" placeholder="输入数量" 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50">
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="calculate()" class="w-full bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+                <i class="fa fa-calculator"></i>
+                计算单杯成本
+            </button>
+
+            <div id="result" class="mt-5 bg-light rounded-lg p-4 hidden">
+                <div class="text-gray-800 font-medium mb-3">成本明细</div>
+                <div id="result-content" class="text-sm text-gray-700 space-y-2 mb-4"></div>
+                <div class="bg-blue-50 p-3 rounded-lg font-semibold text-secondary" id="total-cost"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 监听容器类型选择，自动填充默认价格
+        const radios = document.querySelectorAll('input[name="container"]');
+        radios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                // 清空所有输入框
+                clearAllInputs();
+                
+                if (this.value === 'soybean') {
+                    // 豆浆杯默认价格
+                    document.getElementById('straw-price').value = 535.22;
+                    document.getElementById('straw-count').value = 10000;
+                    document.getElementById('cup-price').value = 1009.23;
+                    document.getElementById('cup-count').value = 10000;
+                    document.getElementById('lid-price').value = 0;
+                    document.getElementById('lid-count').value = 0;
+                    document.getElementById('paper-price').value = 0;
+                    document.getElementById('paper-count').value = 0;
+                    document.getElementById('bag-price').value = 10;
+                    document.getElementById('bag-count').value = 1000;
+                } else if (this.value === 'pp') {
+                    // PP杯默认价格
+                    document.getElementById('straw-price').value = 49.48;
+                    document.getElementById('straw-count').value = 1000;
+                    document.getElementById('cup-price').value = 217.72;
+                    document.getElementById('cup-count').value = 1000;
+                    document.getElementById('lid-price').value = 98.78;
+                    document.getElementById('lid-count').value = 1000;
+                    document.getElementById('paper-price').value = 22.7;
+                    document.getElementById('paper-count').value = 1000;
+                    document.getElementById('bag-price').value = 50;
+                    document.getElementById('bag-count').value = 1000;
+                } else if (this.value === 'pet') {
+                    // PET杯默认价格
+                    document.getElementById('straw-price').value = 139.5;
+                    document.getElementById('straw-count').value = 5000;
+                    document.getElementById('cup-price').value = 900;
+                    document.getElementById('cup-count').value = 5000;
+                    document.getElementById('lid-price').value = 270;
+                    document.getElementById('lid-count').value = 5000;
+                    document.getElementById('paper-price').value = 81;
+                    document.getElementById('paper-count').value = 5000;
+                    document.getElementById('bag-price').value = 50;
+                    document.getElementById('bag-count').value = 1000;
+                } 
+                // 自定义模式保持输入框为空，由用户填写
+            });
+        });
+        
+        // 清空所有输入框
+        function clearAllInputs() {
+            document.getElementById('straw-price').value = '';
+            document.getElementById('straw-count').value = '';
+            document.getElementById('cup-price').value = '';
+            document.getElementById('cup-count').value = '';
+            document.getElementById('lid-price').value = '';
+            document.getElementById('lid-count').value = '';
+            document.getElementById('paper-price').value = '';
+            document.getElementById('paper-count').value = '';
+            document.getElementById('bag-price').value = '';
+            document.getElementById('bag-count').value = '';
+        }
+
+        // 计算单杯成本
+        function calculate() {
+            // 获取各项数值
+            const strawPrice = parseFloat(document.getElementById('straw-price').value) || 0;
+            const strawCount = parseInt(document.getElementById('straw-count').value) || 0;
+            const cupPrice = parseFloat(document.getElementById('cup-price').value) || 0;
+            const cupCount = parseInt(document.getElementById('cup-count').value) || 0;
+            const lidPrice = parseFloat(document.getElementById('lid-price').value) || 0;
+            const lidCount = parseInt(document.getElementById('lid-count').value) || 0;
+            const paperPrice = parseFloat(document.getElementById('paper-price').value) || 0;
+            const paperCount = parseInt(document.getElementById('paper-count').value) || 0;
+            const bagPrice = parseFloat(document.getElementById('bag-price').value) || 0;
+            const bagCount = parseInt(document.getElementById('bag-count').value) || 0;
+            
+            // 计算各项单品成本（避免除以0的情况）
+            const strawUnitCost = strawCount > 0 ? strawPrice / strawCount : 0;
+            const cupUnitCost = cupCount > 0 ? cupPrice / cupCount : 0;
+            const lidUnitCost = lidCount > 0 ? lidPrice / lidCount : 0;
+            const paperUnitCost = paperCount > 0 ? paperPrice / paperCount : 0;
+            const bagUnitCost = bagCount > 0 ? bagPrice / bagCount : 0;
+            
+            // 计算总成本
+            const totalUnitCost = strawUnitCost + cupUnitCost + lidUnitCost + paperUnitCost + bagUnitCost;
+            
+            // 显示结果
+            const resultContent = document.getElementById('result-content');
+            const result = `
+                <p>吸管：${strawPrice.toFixed(2)}元 / ${strawCount}个 → 单个成本：${strawUnitCost.toFixed(4)}元</p>
+                <p>杯子：${cupPrice.toFixed(2)}元 / ${cupCount}个 → 单个成本：${cupUnitCost.toFixed(4)}元</p>
+                <p>杯盖：${lidPrice.toFixed(2)}元 / ${lidCount}个 → 单个成本：${lidUnitCost.toFixed(4)}元</p>
+                <p>防漏纸：${paperPrice.toFixed(2)}元 / ${paperCount}个 → 单个成本：${paperUnitCost.toFixed(4)}元</p>
+                <p>袋子：${bagPrice.toFixed(2)}元 / ${bagCount}个 → 单个成本：${bagUnitCost.toFixed(4)}元</p>
+            `;
+            resultContent.innerHTML = result;
+            document.getElementById('total-cost').textContent = `单杯总成本：${totalUnitCost.toFixed(4)}元`;
+            document.getElementById('result').style.display = 'block';
+            
+            // 添加结果显示动画
+            const resultEl = document.getElementById('result');
+            resultEl.classList.add('animate-fadeIn');
+            setTimeout(() => {
+                resultEl.classList.remove('animate-fadeIn');
+            }, 500);
+        }
+    </script>
+</body>
+</html>
+    
